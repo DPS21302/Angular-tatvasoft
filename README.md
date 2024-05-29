@@ -428,9 +428,14 @@ Angular_VCProject
 ├─ tsconfig.json
 └─ tsconfig.spec.json
 
-```#   A n g u l a r - t a t v a s o f t  
- #   A n g u l a r - t a t v a s o f t  
- #   A n g u l a r - t a t v a s o f t  
- #   A n g u l a r - t a t v a s o f t  
- #   A n g u l a r - t a t v a s o f t  
+```#   A n g u l a r - t a t v a s o f t 
+ 
+ #   A n g u l a r - t a t v a s o f t 
+ 
+ #   A n g u l a r - t a t v a s o f t 
+ 
+ #   A n g u l a r - t a t v a s o f t 
+ 
+ #   A n g u l a r - t a t v a s o f t 
+ 
  
