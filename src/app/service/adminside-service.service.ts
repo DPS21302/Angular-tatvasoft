@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHandler, HttpHeaders } from '@angular/common/http';
-import { City, CMS, Country, Mission } from '../model/cms.model';
+import { City, CMS, Country, Mission,MissionDto } from '../model/cms.model';
 import { Observable } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
@@ -8,19 +8,24 @@ import { MissionApplication } from '../model/missionApplication.model';
 import { MissionTheme } from '../model/missionTheme.model';
 import { MissionSkill } from '../model/missionSkill.model';
 import { UserDetail } from '../model/user.model'; 
+
 @Injectable({
   providedIn: 'root',
 })
+
 export class AdminsideServiceService {
   constructor(
     public http: HttpClient,
     public toastr: ToastrService,
-    public router: Router
+    public router: Router,
+   
   ) {}
   // apiUrl:string='http://localhost:63943/api';
   apiUrl: string = 'https://localhost:7178/api';
   imageUrl: string = 'http://localhost:56577';
 
+
+  
   // User Details
   getUserDetails(): Observable<UserDetail[]> {
     return this.http.get<UserDetail[]>(`${this.apiUrl}/v1/UserDetails`);
@@ -63,10 +68,10 @@ export class AdminsideServiceService {
 
   //Mission
   GetMissionThemeList():Observable<MissionTheme[]>{
-    return this.http.get<MissionTheme[]>(`${this.apiUrl}/Mission/GetMissionThemeList`);
+    return this.http.get<MissionTheme[]>(`${this.apiUrl}/MissionTheme`);
   }
   GetMissionSkillList():Observable<MissionSkill[]>{
-    return this.http.get<MissionSkill[]>(`${this.apiUrl}/Mission/GetMissionSkillList`);
+    return this.http.get<MissionSkill[]>(`${this.apiUrl}/MissionSkill`);
   }
   UploadImage(data: any) {
     return this.http.post(`${this.apiUrl}/Common/UploadImage`,data);
@@ -75,27 +80,28 @@ export class AdminsideServiceService {
     return this.http.post(`${this.apiUrl}/Mission/UploadImage`,data);
   }
   MissionList(): Observable<Mission[]> {
-    return this.http.get<Mission[]>(`${this.apiUrl}/Mission/MissionList`);
+    return this.http.get<Mission[]>(`${this.apiUrl}/Missions`);
   }
   MissionDetailById(id: number): Observable<Mission[]> {
     return this.http.get<Mission[]>(
-      `${this.apiUrl}/Mission/MissionDetailById/${id}`
+      `${this.apiUrl}/Mission/${id}`
     );
   }
   CountryList(): Observable<Country[]> {
-    return this.http.get<Country[]>(`${this.apiUrl}/Common/CountryList`);
+    return this.http.get<Country[]>(`${this.apiUrl}/Countries`);
   }
   CityList(countryId: any): Observable<City[]> {
-    return this.http.get<City[]>(`${this.apiUrl}/Common/CityList/${countryId}`);
+    return this.http.get<City[]>(`${this.apiUrl}/Cities/GetCitiesByCountryId/${countryId}`);
   }
-  AddMission(data: Mission) {
-    return this.http.post(`${this.apiUrl}/Mission/AddMission`, data);
+  AddMission(missionDto: MissionDto) {
+    return this.http.post<Mission>(`${this.apiUrl}/Missions`, missionDto);
   }
+  
   UpdateMission(data: Mission) {
-    return this.http.post(`${this.apiUrl}/Mission/UpdateMission`, data);
+    return this.http.post(`${this.apiUrl}/Missions/${data.id}`, data);
   }
   DeleteMission(data: any) {
-    return this.http.delete(`${this.apiUrl}/Mission/DeleteMission/${data}`);
+    return this.http.delete(`${this.apiUrl}/Missions/${data}`);
   }
 
   //Mission Application
@@ -116,26 +122,26 @@ export class AdminsideServiceService {
   //Mission Theme
   MissionThemeList(): Observable<MissionTheme[]> {
     return this.http.get<MissionTheme[]>(
-      `${this.apiUrl}/MissionTheme/GetMissionThemeList`
+      `${this.apiUrl}/MissionTheme`
     );
   }
   MissionThemeById(id: any): Observable<MissionTheme[]> {
     return this.http.get<MissionTheme[]>(
-      `${this.apiUrl}/MissionTheme/GetMissionThemeById/${id}`
+      `${this.apiUrl}/MissionTheme/${id}`
     );
   }
   AddMissionTheme(data: MissionTheme) {
-    return this.http.post(`${this.apiUrl}/MissionTheme/AddMissionTheme`, data);
+    return this.http.post(`${this.apiUrl}/MissionTheme/`, data);
   }
   UpdateMissionTheme(data: MissionTheme) {
-    return this.http.post(
-      `${this.apiUrl}/MissionTheme/UpdateMissionTheme`,
+    return this.http.put(
+      `${this.apiUrl}/MissionTheme/${data.id}`,
       data
     );
   }
   DeleteMissionTheme(data: any) {
     return this.http.delete(
-      `${this.apiUrl}/MissionTheme/DeleteMissionTheme/${data}`
+      `${this.apiUrl}/MissionTheme/${data}`
     );
   }
 
