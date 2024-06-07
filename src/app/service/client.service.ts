@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, catchError } from 'rxjs';
 import { City, Country, Mission } from '../model/cms.model';
 import { MissionApplication } from '../model/missionApplication.model';
 import { user, UserDetail } from '../model/user.model';
@@ -16,8 +16,8 @@ export class ClientService {
   imageUrl:string='http://localhost:56577';
 
   //HomePage
-  MissionList():Observable<Mission[]>{
-    return this.http.get<Mission[]>(`${this.apiUrl}/Missions`);
+  MissionList(userId:any):Observable<Mission[]>{
+    return this.http.get<Mission[]>(`${this.apiUrl}/ClientMission/${userId}`);
   }
   MissionClientList(data:any){
     return this.http.post(`${this.apiUrl}/ClientMission/MissionClientList`,data);
@@ -25,8 +25,8 @@ export class ClientService {
   MissionDetailByMissionId(data:any){
     return this.http.post(`${this.apiUrl}/ClientMission/MissionDetailByMissionId/`,data);
   }
-  ApplyMission(data:any){debugger;
-     return this.http.post(`${this.apiUrl}/ClientMission/ApplyMission`,data);
+  ApplyMission(data:any) :  Observable<any>{
+     return this.http.post(`${this.apiUrl}/MissionApplication/Apply`,data);
   }
 
   //ShareYourStory
@@ -39,13 +39,13 @@ export class ClientService {
   }
 
   LoginUserDetailById(id:any):Observable<user[]>{
-    return this.http.get<user[]>(`${this.apiUrl}/Login/LoginUserDetailById/${id}`);
+    return this.http.get<user[]>(`${this.apiUrl}/v1/UserProfile/${id}`);
   }
   CountryList():Observable<Country[]>{
-    return this.http.get<Country[]>(`${this.apiUrl}/Common/CountryList`);
+    return this.http.get<Country[]>(`${this.apiUrl}/Countries`);
   }
   CityList(countryId:any):Observable<City[]>{
-    return this.http.get<City[]>(`${this.apiUrl}/Common/CityList/${countryId}`);
+    return this.http.get<City[]>(`${this.apiUrl}/Cities/GetCitiesByCountryId/${countryId}`);
   }
   //Add Skill
   AddUserSkill(data:any){
@@ -55,12 +55,17 @@ export class ClientService {
     return this.http.get<any[]>(`${this.apiUrl}/Common/GetUserSkill/${userId}`);
   }
 
-  LoginUserProfileUpdate(userDetail:UserDetail){
-      return this.http.post(`${this.apiUrl}/Login/LoginUserProfileUpdate`,userDetail);
+  LoginUserProfileUpdate(userDetail: any) {
+    return this.http.put(`${this.apiUrl}/v1/UserProfile/${userDetail.user.id}`, userDetail)
+      .pipe(
+        catchError(err => {
+          throw new Error('HTTP Error: ' + err.message);
+        })
+      );
   }
 
   GetUserProfileDetailById(userId:any){
-    return this.http.get<UserDetail[]>(`${this.apiUrl}/Login/GetUserProfileDetailById/${userId}`);
+    return this.http.get<UserDetail[]>(`${this.apiUrl}/v1/UserProfile/${userId}`);
   }
 
   ContactUs(data:any)
